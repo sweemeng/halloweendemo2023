@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "halloweenbot2023"
+version = "0.1.0"
+description = ""
+authors = ["sweemeng <sweester@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+openai = "^0.28.1"
+python-dotenv = "^1.0.0"
+pyaudio = "^0.2.13"
+speechrecognition = "^3.10.0"
+websockets = "^12.0"
+numpy = "1.25.2"
+soundfile = "^0.12.1"
+torch = "^2.1.0"
+whisper = "^1.1.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
