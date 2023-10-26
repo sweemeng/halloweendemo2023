@@ -2,6 +2,8 @@ import os
 
 import speech_recognition as sr
 from websockets.sync.client import connect
+import pyttsx3
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -9,6 +11,9 @@ load_dotenv()
 
 def main():
     recognizer = sr.Recognizer()
+    speaker = pyttsx3.init()
+    speaker.setProperty('rate', 120)
+
     url = os.getenv("WEBSOCKET_BOT_URL")
     with connect(url) as websocket:
         with sr.Microphone(device_index=8) as source:
@@ -20,6 +25,7 @@ def main():
             print("You said: {}".format(text))
             websocket.send(text)
             response = websocket.recv()
+            speaker.say(response)
             print(response)
 
 
