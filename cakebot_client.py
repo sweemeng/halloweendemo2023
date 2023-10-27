@@ -12,21 +12,28 @@ load_dotenv()
 def main():
     recognizer = sr.Recognizer()
     speaker = pyttsx3.init()
-    speaker.setProperty('rate', 120)
+    speaker.setProperty('rate', 200)
 
     url = os.getenv("WEBSOCKET_BOT_URL")
+    speaker.say("Welcome to our cake shop how may i help you?")
+    speaker.runAndWait()
     with connect(url) as websocket:
-        with sr.Microphone(device_index=8) as source:
-            recognizer.adjust_for_ambient_noise(source)
-            print("Speak anything: ")
-            audio = recognizer.listen(source)
+        with sr.Microphone() as source:
+            while True:
+                response = websocket.recv()
+                print(response)
+                if response == "STOP":
+                    break
+                if response != "READY":
+                    speaker.say(response)
+                speaker.runAndWait()
+                recognizer.adjust_for_ambient_noise(source)
+                print("Speak anything: ")
+                audio = recognizer.listen(source)
 
-            text = recognizer.recognize_whisper_api(audio, api_key=os.getenv("OPENAI_API_KEY"))
-            print("You said: {}".format(text))
-            websocket.send(text)
-            response = websocket.recv()
-            speaker.say(response)
-            print(response)
+                text = recognizer.recognize_whisper_api(audio, api_key=os.getenv("OPENAI_API_KEY"))
+                print("You said: {}".format(text))
+                websocket.send(text)
 
 
 if __name__ == '__main__':

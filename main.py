@@ -5,7 +5,6 @@ import speech_recognition as sr
 
 load_dotenv()
 
-
 def main():
     openai_key = getenv("OPENAI_API_KEY")
     recognizer = sr.Recognizer()
