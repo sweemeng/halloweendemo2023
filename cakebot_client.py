@@ -17,23 +17,22 @@ def main():
     url = os.getenv("WEBSOCKET_BOT_URL")
     speaker.say("Welcome to our cake shop how may i help you?")
     speaker.runAndWait()
-    with connect(url) as websocket:
-        with sr.Microphone() as source:
-            while True:
-                response = websocket.recv()
-                print(response)
-                if response == "STOP":
-                    break
-                if response != "READY":
-                    speaker.say(response)
-                speaker.runAndWait()
-                recognizer.adjust_for_ambient_noise(source)
-                print("Speak anything: ")
-                audio = recognizer.listen(source)
+    with connect(url) as websocket, sr.Microphone() as source:
+        while True:
+            response = websocket.recv()
+            print(response)
+            if response == "STOP":
+                break
+            if response != "READY":
+                speaker.say(response)
+            speaker.runAndWait()
+            recognizer.adjust_for_ambient_noise(source)
+            print("Speak anything: ")
+            audio = recognizer.listen(source)
 
-                text = recognizer.recognize_whisper_api(audio, api_key=os.getenv("OPENAI_API_KEY"))
-                print("You said: {}".format(text))
-                websocket.send(text)
+            text = recognizer.recognize_whisper_api(audio, api_key=os.getenv("OPENAI_API_KEY"))
+            print("You said: {}".format(text))
+            websocket.send(text)
 
 
 if __name__ == '__main__':
