@@ -15,13 +15,14 @@ def main():
     speaker = pyttsx3.init()
     speaker.setProperty('rate', 20)
     system_prompt = "You're a scary assistant, you tell scary story to scare people for entertainment. "
-    messages = [
-        {"role": "system", "content": system_prompt},
-    ]
+
     speaker.say("Do you want to hear a scary story?")
     speaker.runAndWait()
     with sr.Microphone() as source:
         while True:
+            messages = [
+                {"role": "system", "content": system_prompt},
+            ]
             recognizer.adjust_for_ambient_noise(source)
             speaker.say("Tell me what kind of story you want to hear?")
             speaker.runAndWait()
