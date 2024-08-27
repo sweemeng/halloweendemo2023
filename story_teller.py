@@ -1,18 +1,19 @@
 import os
-
+import openai
 import speech_recognition as sr
 import pyttsx3
 from dotenv import load_dotenv
-load_dotenv()
-import openai
 
-MODEL = "gpt-3.5-turbo"
+load_dotenv()
+
+
+MODEL = "gpt-4o-mini"
 
 
 def main():
     recognizer = sr.Recognizer()
     speaker = pyttsx3.init()
-    speaker.setProperty('rate', 200)
+    speaker.setProperty('rate', 20)
     system_prompt = "You're a scary assistant, you tell scary story to scare people for entertainment. "
     messages = [
         {"role": "system", "content": system_prompt},
@@ -29,13 +30,16 @@ def main():
             text = recognizer.recognize_whisper_api(audio, api_key=os.getenv("OPENAI_API_KEY"))
             print("You said: {}".format(text))
             messages.append({"role": "user", "content": text})
-            response = openai.ChatCompletion.create(
+            client = openai.OpenAI(
+                api_key=os.getenv("OPENAI_API_KEY")
+            )
+            response = client.chat.completions.create(
                 model=MODEL,
                 messages=messages,
                 temperature=0
             )
             print(response)
-            speaker.say(response["choices"][0]["message"]["content"])
+            speaker.say(response.choices[0].message.content)
 
 
 if __name__ == '__main__':
